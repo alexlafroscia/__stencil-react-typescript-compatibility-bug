@@ -4,24 +4,28 @@
 */
 /* tslint:disable */
 
-import { JSXElements } from '@stencil/core';
+import '@stencil/core';
 
 
 
 
-declare namespace StencilComponents {
+export namespace Components {
 
   interface MyComponent {}
-  interface MyComponentAttributes extends JSXElements.HTMLAttributes {}
-}
-
-export interface LocalIntrinsicElements {
-  'my-component': StencilComponents.MyComponentAttributes;
+  interface MyComponentAttributes extends StencilHTMLAttributes {}
 }
 
 declare global {
+  interface StencilElementInterfaces {
+    'MyComponent': Components.MyComponent;
+  }
 
-  interface HTMLMyComponentElement extends StencilComponents.MyComponent, HTMLStencilElement {}
+  interface StencilIntrinsicElements {
+    'my-component': Components.MyComponentAttributes;
+  }
+
+
+  interface HTMLMyComponentElement extends Components.MyComponent, HTMLStencilElement {}
   var HTMLMyComponentElement: {
     prototype: HTMLMyComponentElement;
     new (): HTMLMyComponentElement;
@@ -34,19 +38,14 @@ declare global {
   interface ElementTagNameMap {
     'my-component': HTMLMyComponentElement;
   }
-}
 
 
-import { DefaultIntrinsicElements } from '@stencil/core';
-
-declare global {
   export namespace JSX {
     export interface Element {}
-    export interface IntrinsicElements extends LocalIntrinsicElements, DefaultIntrinsicElements {
+    export interface IntrinsicElements extends StencilIntrinsicElements {
       [tagName: string]: any;
     }
   }
-  export interface HTMLAttributes extends JSXElements.HTMLAttributes {}
-}
+  export interface HTMLAttributes extends StencilHTMLAttributes {}
 
-export declare function defineCustomElements(window: any): void;
+}
